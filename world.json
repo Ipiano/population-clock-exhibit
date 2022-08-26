@@ -1,0 +1,74 @@
+{
+  "world": {
+    "label": "World Population",
+    "estimate": true,
+    "population": 7915854387,
+    "pop_midnight": 7915680365,
+    "population_rate": 2.3441182775241,
+    "rate_interval": "second",
+    "last_updated": "1661120358",
+    "monthly_estimates": {
+      "1656633600": {
+        "population": 7905336896,
+        "estimate": true,
+        "projected": false
+      },
+      "1659312000": {
+        "population": 7911615382,
+        "estimate": true,
+        "projected": false
+      },
+      "1661990400": {
+        "population": 7917893868,
+        "estimate": true,
+        "projected": true
+      },
+      "1664582400": {
+        "population": 7923969822,
+        "estimate": true,
+        "projected": true
+      },
+      "1667260800": {
+        "population": 7930248308,
+        "estimate": true,
+        "projected": true
+      },
+      "1669852800": {
+        "population": 7936324262,
+        "estimate": true,
+        "projected": true
+      },
+      "1672531200": {
+        "population": 7942602748,
+        "estimate": true,
+        "projected": true
+      },
+      "1675209600": {
+        "population": 7948881234,
+        "estimate": true,
+        "projected": true
+      },
+      "1677628800": {
+        "population": 7954552124,
+        "estimate": true,
+        "projected": true
+      },
+      "1680307200": {
+        "population": 7960830610,
+        "estimate": true,
+        "projected": true
+      },
+      "1682899200": {
+        "population": 7966906564,
+        "estimate": true,
+        "projected": true
+      },
+      "1688169600": {
+        "population": 7979261010,
+        "estimate": true,
+        "projected": true
+      }
+    },
+    "date": "20220821"
+  }
+}

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Population Clock</title>
+  <meta charset="UTF-8">
+  <meta name="description"
+    content="Shows estimates of current USA Population overall and people by US state/county and of World Population overall, by country and most populated countries." />
+
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./css/main.min.css" media="screen">
+  <link rel="stylesheet" href="./css/population_counter.min.css" media="screen">
+  <link rel="stylesheet" href="./css/population_on_date.min.css" media="screen">
+  <link rel="stylesheet" href="./css/population_growth.min.css" media="screen">
+  <link rel="stylesheet" href="./css/population_pyramid.min.css" media="screen">
+  <link rel="stylesheet" href="./css/populous_density.min.css" media="screen">
+  <link rel="stylesheet" href="./css/world.min.css" media="all">
+  <link rel="stylesheet" href="./css/world.print.min.css" media="print">
+
+
+  <!-- external libraries -->
+  <link rel="stylesheet" href="./js/jquery-ui.custom/css/custom-theme/jquery-ui.custom.min.css" media="screen">
+
+  <script src="./js/jquery-1.8.3.min.js" type="text/javascript"></script>
+  <script src="./js/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" type="text/javascript"></script>
+  <script src="./js/jquery-ui-themes-1.10.0/themes/base/jquery-ui.css" type="text/javascript"></script>
+
+
+  <script src="./js/raphael/raphael-min.js" type="text/javascript"></script>
+
+  <!-- raphael.export required for svg-to-png -->
+  <script src="./js/raphael/raphael.export.min.js" type="text/javascript"></script>
+
+  <!-- g.raphael required for charting libraries -->
+  <script src="./js/raphael/g.raphael.min.js" type="text/javascript"></script>
+  <script src="./js/raphael/g.line.min.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- custom objects -->
+  <script src="./js/main.min.js" type="text/javascript"></script>
+  <script src="./js/api.min.js" type="text/javascript"></script>
+  <script src="./js/animator.min.js" type="text/javascript"></script>
+  <script src="./js/counter.min.js" type="text/javascript"></script>
+  <script src="./js/odometer.min.js" type="text/javascript"></script>
+  <script src="./js/html_progress_bar.min.js" type="text/javascript"></script>
+  <script src="./js/linechart_with_overlay.min.js" type="text/javascript"></script>
+  <script src="./js/tabbed_table.min.js" type="text/javascript"></script>
+  <script src="./js/population.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/slider.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/pyramid_graph.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/share.min.js" type="text/javascript"></script>
+
+  <script src="https://www.census.gov/popclock/population_counters/population_counters_controller.min.js"
+    type="text/javascript" charset="utf-8"></script>
+  <script src="https://www.census.gov/popclock/population_on_date/population_on_date_controller.min.js"
+    type="text/javascript" charset="utf-8"></script>
+  <script src="https://www.census.gov/popclock/population_growth/population_growth_controller.min.js"
+    type="text/javascript" charset="utf-8"></script>
+  <script src="https://www.census.gov/popclock/population_pyramid/population_pyramid_controller.min.js"
+    type="text/javascript" charset="utf-8"></script>
+  <script src="https://www.census.gov/popclock/most_populous/most_populous_controller.min.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="https://www.census.gov/popclock/highest_density/highest_density_controller.min.js" type="text/javascript"
+    charset="utf-8"></script>
+
+  <script type="text/javascript">
+    var config = { "component_dividing_header": "Annual Population Estimates", "learn_more_link_label": "Learn More", "share_link_label": "Download and Share", "view_data_table_link_label": "View Data Table", "embed_world_footnotes": { "world_counter": { "label": "World Population", "content": "<p>World Population Clock Source: U.S. Census Bureau, International Database (demographic data) and USA Trade Online (trade data).<\/p>\r\n\t\t\t\t<p>Populations shown for the Most Populous Countries and on the world map are projected to July 1, 2022.<\/p>\r\n                                <p>To learn more about world population projections, go to <a href=\"https:\/\/www.census.gov\/data\/data-tools\/population-clock\/world-notes.html\">Notes on the World Population Clock<\/a>.<\/p>\r\n                                <p>To learn more about international trade data, go to <a href=\"https:\/\/www.census.gov\/foreign-trade\/guide\/index.html\">Guide to Foreign Trade Statistics<\/a>.<\/p>\r\n\t\t\t\t<p>Coordinated Universal Time (UTC) is the equivalent of Eastern Standard Time (EST) plus 5 hours or Eastern Daylight Saving Time (EDT) plus 4 hours.<\/p>" } }, "world_footnotes": { "label": "About the Population Clock and Population Estimates", "map": { "label": "Source and Notes", "content": "<p>Source: U.S. Census Bureau, <a href=\"https:\/\/www.census.gov\/programs-surveys\/international-programs\/about\/idb.html\">International Database<\/a> (demographic data) and <a href=\"http:\/\/usatrade.census.gov\/\">USA Trade Online<\/a> (trade data).<\/p>\r\n\t\t\t\t<p>Populations shown for the Most Populous Countries and on the world map are projected to July 1, 2022.<\/p>\r\n\r\n                                <p>To learn more about world population projections, go to <a href=\"https:\/\/www.census.gov\/data\/data-tools\/population-clock\/world-notes.html\">Notes on the World Population Clock<\/a>.<\/p>\r\n                                <p>To learn more about international trade data, go to <a href=\"https:\/\/www.census.gov\/foreign-trade\/guide\/index.html\">Guide to Foreign Trade Statistics<\/a>.<\/p>\r\n\r\n\r\n\r\n\r\n\t\t\t\t<p>All trade figures are in U.S. dollars on a nominal basis.<\/p>\r\n\t\t\t\t<p>Coordinated Universal Time (UTC) is the equivalent of Eastern Standard Time (EST) plus 5 hours or Eastern Daylight Saving Time (EDT) plus 4 hours.<\/p>" }, "country": { "label": "Source and Notes", "content": "<p>Source: U.S. Census Bureau, <a href=\"https:\/\/www.census.gov\/programs-surveys\/international-programs\/about\/idb.html\">International Database<\/a> (demographic data) and <a href=\"http:\/\/usatrade.census.gov\">USA Trade Online<\/a> (trade data); Central Intelligence Agency, The World Fact Book (country reference maps).<\/p>\r\n\t\t\t\t<p>This application presents data for 228 countries and areas of the world with a 2022 population of 5,000 or more. For eleven of those countries and areas, only demographic data are presented. <\/p>\r\n\t\t\t\t<p>\"Data not available\" indicates that data are not available from this application.  In such instances, data may be available elsewhere at the census.gov website.<\/p>\r\n\t\t\t\t<p>Trade figures presented for France do not include data for overseas departments French Guiana, Guadeloupe, Martinique, Mayotte, and Reunion but do include data for dependencies Saint Barthelemy and Saint Martin.  Trade figures for the United Kingdom include data for crown dependencies Guernsey, Isle of Man, and Jersey.<\/p>\r\n                                <p>To learn more about world population projections, go to <a href=\"https:\/\/www.census.gov\/data\/data-tools\/population-clock\/world-notes.html\">Notes on the World Population Clock<\/a>.<\/p>\r\n                                <p>To learn more about international trade data, go to <a href=\"https:\/\/www.census.gov\/foreign-trade\/guide\/index.html\">Guide to Foreign Trade Statistics<\/a>.<\/p>\r\n\t\t\t\t<p>All trade figures are in U.S. dollars on a nominal basis.<\/p>" } }, "footnotes": { "label": "About the Population Clock and Population Estimates", "counter": { "label": "U.S. Population", "content": "\r\n                     <p>The U.S. population clock is based on a series of short-term projections for the resident population of the United States. This includes people whose usual residence is in the 50 states and the District of Columbia. These projections do not include members of the Armed Forces overseas, their dependents, or other U.S. citizens residing outside the United States.<\/p>\r\n                     <p>The projections are based on a monthly series of population estimates starting with the April 1, 2020 resident population from the 2020 Census.<\/p>\r\n\t\t<p>At the end of each year, a revised series of population estimates from the census date forward is used to update the short-term projections for the population clock. Once the updated series of monthly projections is completed, the daily population clock values are derived by interpolation. Within each calendar month, the daily numerical population change is assumed to be constant, subject to negligible differences caused by rounding.<\/p>\r\n\t\t\t\t<p>Population estimates produced by the U.S. Census Bureau for the United States, states, metropolitan and micropolitan statistical areas, counties, cities, towns, as well as for Puerto Rico and its municipios can be found on the <a href=\"\/\/www.census.gov\/programs-surveys\/popest.html\"> Population Estimates<\/a> web page. Projections of the future population for the United States can be found on the <a href=\"\/\/www.census.gov\/programs-surveys\/popproj.html\">Population Projections<\/a> web page.<\/p>" }, "pop_on_date": { "label": "", "content": "" }, "growth": { "label": "", "content": "" }, "pyramid": { "label": "", "content": "" }, "populous": { "label": "", "content": "" }, "density": { "label": "", "content": "" } }, "components": { "counter": { "label": "Population Counters" }, "us": { "label": "U.S. Population", "url": "https:\/\/www.census.gov\/popclock\/?intcmp=w_200x402", "interval": 15, "birth_rate_label": "One birth every <strong>%@ seconds<\/strong>", "death_rate_label": "One death every <strong>%@ seconds<\/strong>", "immigrant_rate_label": "One international migrant (net) every <strong>%@ seconds<\/strong>", "net_gain_label": "Net gain of one person every <strong>%@ seconds<\/strong>", "learn_more_link_title": "Placeholder title for component link 1", "share_link_title": "Placeholder title for component link 1" }, "us_rates": { "label": "Components of Population Change", "table_summary": "Placeholder for population rates table summary 1", "table_header_labels": ["Rates", "Visualization"] }, "world": { "label": "World Population", "url": "https:\/\/www.census.gov\/popclock\/world?intcmp=w_200x402", "interval": 0.1 }, "world_rates": { "label": "<a href=\".\/world\" target=\"_parent\" title=\"International Programs - Country Rank\">TOP 10 MOST POPULOUS COUNTRIES (July 1, 2022) <\/a>", "tables": [{ "title": "<a href=\".\/world\" title=\"International Programs - Country Rank\">TOP 10 MOST POPULOUS COUNTRIES (July 1, 2022) <\/a>", "columns": ["Rank. Country", "Population", "Rank. Country", "Population"], "rows": { "China": 1410539758, "India": 1389637446, "United States": 332838183, "Indonesia": 277329163, "Pakistan": 242923845, "Nigeria": 225082083, "Brazil": 217240060, "Bangladesh": 165650475, "Russia": 142021981, "Mexico": 129150971 }, "vintage": "2012", "table_summary": "Placeholder for population rates table summary 5" }, { "title": "<a href=\".\/population\/international\/data\/countryrank\/rank.php\" title=\"International Programs - Country Rank\">Top 10 Fastest Growing Countries<\/a>", "columns": ["Rank", "Country"], "rows": { "China": 1410539758, "India": 1389637446, "United States": 332838183, "Indonesia": 277329163, "Pakistan": 242923845, "Nigeria": 225082083, "Brazil": 217240060, "Bangladesh": 165650475, "Russia": 142021981, "Mexico": 129150971 }, "vintage": "2012", "table_summary": "Placeholder for population rates table summary 6" }] }, "pop_on_date": { "label": "The United States population on %@ %@: %@", "default_year": "2022", "default_month": "08", "default_day": "20", "min_year": 2020, "min_month": 4, "min_day": 1, "learn_more_link_title": "Placeholder title for component link 2", "share_link_title": "Placeholder title for component link 2" }, "growth": { "label": "United States Population Growth by Region", "y_axis_label": "Population (in millions)", "min_year": 2020, "max_year": 2021, "learn_more_link_title": "Placeholder title for component link 3", "share_link_title": "Placeholder title for component link 3", "view_data_table_link_title": "Placeholder title for component link3", "table_summary": "Placeholder for population rates table summary 3", "table_header_labels": ["Region", "Population", "Visualization", "Percentage"] }, "pyramid": { "label": "United States Population by Age and Sex", "x_axis_label_middle": "% of Population", "x_axis_label_modifier": "%", "min_year": 2020, "max_year": 2021, "max_total_percentage": 1, "table_summary": "Placeholder for population rates table summary 4", "learn_more_link_title": "Placeholder title for component link 4", "share_link_title": "Placeholder title for component link 4", "view_data_table_link_title": "Placeholder title for component link4" }, "populous": { "label": "Most Populous", "learn_more_link_title": "Placeholder title for component link 5", "share_link_title": "Placeholder title for component link 5", "tables": [{ "title": "States", "columns": ["State", "Population", "Pop. per sq. mi."], "vintage": "2021", "table_summary": "Placeholder for population rates table summary 7" }, { "title": "Counties", "columns": ["County", "Population", "Pop. per sq. mi."], "vintage": "2021", "table_summary": "Placeholder for population rates table summary 6" }, { "title": "Cities", "columns": ["City, ST", "Population", "Pop. per sq. mi."], "vintage": "2021", "table_summary": "Placeholder for population rates table summary 5" }] }, "density": { "label": "Highest Density", "learn_more_link_title": "Placeholder title for component link 6", "share_link_title": "Placeholder title for component link 6", "tables": [{ "title": "States", "columns": ["State", "Population", "Pop. per sq. mi."], "vintage": "2021", "table_summary": "Placeholder for population rates table summary 10" }, { "title": "Counties", "columns": ["County", "Population", "Pop. per sq. mi."], "vintage": "2021", "table_summary": "Placeholder for population rates table summary 9" }, { "title": "Cities", "columns": ["City, ST", "Population", "Pop. per sq. mi."], "vintage": "2021", "table_summary": "Placeholder for population rates table summary 8" }] } }, "api": { "cache": false, "methods": { "us": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/us" }, "world": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/world" }, "pop_on_date": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/us" }, "region": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/region", "data": { "regions": "west,midwest,northeast,south" } }, "demographic": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/demographic" }, "populous": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/rank", "data": { "type": "states,counties,cities", "sort": "population:DESC", "limit": 10 } }, "density": { "url": "https:\/\/www.census.gov\/popclock\/data\/population.php\/rank", "data": { "type": "states,counties,cities", "sort": "density:DESC", "limit": 10 } } } }, "share": { "components": { "counter": { "pinterest": "Every minute the US #population is changing, see population changes @uscensusbureau Population Clock", "facebook": "Every minute the U.S. population is changing, see how quickly it changes with the Census' Population Clock.", "twitter": "Every minute the US #population is changing, see population changes @uscensusbureau Population Clock", "email": "Every minute the U.S. population is changing, see how quickly it changes with the Census' Population Clock. %url%" }, "pop_on_date": { "pinterest": "Did u know the US #population on %date% was %population%? Discover more with @uscensusbureau Population Clock", "facebook": "Did you know the U.S. population on %date% was %population%? Discover how it has changed since with the new Census' Population Clock.", "twitter": "Did u know the US #population on %date% was %population%? Discover more with @uscensusbureau Population Clock", "email": "Did you know the U.S. population on %date% was %population%? Discover how it has changed since with the new Census' Population Clock. %url%" }, "growth": { "pinterest": "How is the US #population changing, region by region? Find out with #Census' Population Clock. @uscensusbureau", "facebook": "How is the U.S. population changing, region by region? Find out with the new Census' Population Clock.", "twitter": "How is the US #population changing, region by region? Find out with #Census' Population Clock. @uscensusbureau %image%", "email": "How is the U.S. population changing, region by region? Find out with the new Census' Population Clock. %url%" }, "pyramid": { "pinterest": "What % of US women are #age 35? Men who are 58? Find out with @uscensusbureau #Population Clock", "facebook": "What percentage of U.S. women are age 35? Men who are 58? Find out with the new Census' Population Clock.", "twitter": "What % of US women are #age 35? Men who are 58? Find out with @uscensusbureau #Population Clock %image%", "email": "What percentage of U.S. women are age 35? Men who are 58? Find out with the new Census' Population Clock. %url%" }, "populous": { "pinterest": "What are the most populous US states, counties and cities? Find out with @uscensusbureau #Population Clock.", "facebook": "What are the most populous U.S. states, counties and cities? Find out with the new Census' Population Clock.", "twitter": "What are the most populous US states, counties and cities? Find out with @uscensusbureau #Population Clock.", "email": "What are the most populous U.S. states, counties and cities? Find out with the new Census' Population Clock. %url%" }, "density": { "pinterest": "Which US states and counties have the highest #population densities? Find out with @uscensusbureau Population Clock.", "facebook": "Which U.S. states and counties have the highest population densities? Find out with the new Census Population Clock.", "twitter": "Which US states and counties have the highest #population densities? Find out with @uscensusbureau Population Clock.", "email": "Which U.S. states and counties have the highest population densities? Find out with the new Census Population Clock. %url%" } }, "pinterest": {}, "facebook": { "title": "Census Population Clock", "site_name": "Census.gov", "type": "government", "tags": { "admins": "100003365860983" } }, "twitter": {}, "email": { "to": "", "subject": "Check out the Census Population Clock" }, "url": "http:\/\/go.usa.gov\/2Y45", "image": "https:\/\/www.census.gov\/images\/census-logo-whiteBG.png" } };
+    var api = new API(config.api.cache, config.api.methods);
+
+
+    var animator = new Animator(100);
+
+    var popCountersViewController;
+    var popOnDateViewController;
+    var popGrowthViewController;
+    var popPyramidViewController;
+    var mostPopulousViewController;
+    var highestDensityViewController;
+
+    var popoverOverlay;
+    var $popoverContainer;
+    var $popoverFrame;
+
+    $(function () {
+      // Init API
+      api = new API(config.api.cache, config.api.methods);
+
+      $('.share').each(function (index, element) {
+        // set text for the links inside each share link container
+        var $this = $(this);
+        $this.find('a:eq(0)').text(config.learn_more_link_label);
+        $this.find('a:eq(1)').text(config.share_link_label);
+        if ($this.find('a:eq(2)')) {
+          $this.find('a:eq(2)').text(config.view_data_table_link_label);
+        }
+      });
+
+      $('.component-header').find('.share a:eq(0)').click(function (event) {
+        // animate to anchor point
+        event.preventDefault();
+        var anchorTag = $(this).prop('href').split('#')[1];
+        var target = $('#' + anchorTag);
+        $('body, html').animate({ scrollTop: target.offset().top }, 300);
+        return false;
+      });
+
+      $('#content-wrapper h2').append(config.component_dividing_header);
+    });
+
+  </script>
+</head>
+
+<body>
+  <div style="display: none;">
+    <p>This site uses Cascading Style Sheets to present information. Therefore, it may not display properly when
+      disabled.</p>
+  </div>
+
+  <noscript>
+    <p style="width: 1000px; margin: 20px auto; padding: 20px; background: #FFC">This site requires Javascript enabled
+      to retrieve and display data.</p>
+  </noscript>
+  <!-- GOV BANNER AND SIMPLE HEADER LAST UPDATED 1/26/2022 -->
+
+
+  <meta charset="utf-8" />
+  <!-- <link rel="stylesheet" href="https://www.census.gov/main/uswds/uswds-2.12.0/css/uswds.min.css" /> -->
+  <link rel="stylesheet" href="https://www.census.gov/main/css/all_header_styles.css" />
+  <!--   <link rel="stylesheet" href="css/all_header_styles.css" /> -->
+
+
+
+  <script src="https://www.census.gov/main/uswds/uswds-2.12.0/js/uswds.min.js"></script>
+  <section class="usa-banner" aria-label="Official government website">
+    <div class="usa-accordion">
+      <header class="usa-banner__header">
+        <div class="usa-banner__inner">
+          <div class="grid-col-auto">
+            <img class="usa-banner__header-flag"
+              src="https://www.census.gov/main/uswds/uswds-2.12.0/img/us_flag_small.png" alt="U.S. flag" />
+          </div>
+          <div class="grid-col-fill tablet:grid-col-auto">
+            <p class="usa-banner__header-text">
+              An official website of the United States government
+            </p>
+            <!-- <p class="usa-banner__header-action" aria-hidden="true">
+                  Here's how you know
+                </p>
+              </div>
+              <button
+                class="usa-accordion__button usa-banner__button"
+                aria-expanded="false"
+                aria-controls="gov-banner-default"
+              >
+                <span class="usa-banner__button-text">Here's how you know</span>
+              </button>
+            </div>
+          </header>
+          <div class="usa-banner__content usa-accordion__content" id="gov-banner-default">
+            <div class="grid-row grid-gap-lg">
+              <div class="usa-banner__guidance tablet:grid-col-6">
+                <img
+                  class="usa-banner__icon usa-media-block__img"
+                  src="https://www.census.gov/main/uswds/uswds-2.12.0/img/icon-dot-gov.svg"
+                  role="img"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <div class="usa-media-block__body">
+                  <p>
+                    <strong> Official websites use .gov </strong>
+                    <br />
+                    A <strong>.gov</strong> website belongs to an official government
+                    organization in the United States.
+                  </p>
+                </div>
+              </div>
+              <div class="usa-banner__guidance tablet:grid-col-6">
+                <img
+                  class="usa-banner__icon usa-media-block__img"
+                  src="https://www.census.gov/main/uswds/uswds-2.12.0/img/icon-https.svg"
+                  role="img"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <div class="usa-media-block__body">
+                  <p>
+                    <strong> Secure .gov websites use HTTPS </strong>
+                    <br />
+                    A <strong>lock</strong> (
+                    <span class="icon-lock"
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="52"
+                        height="64"
+                        viewBox="0 0 52 64"
+                        class="usa-banner__lock-image"
+                        role="img"
+                        aria-labelledby="banner-lock-title-default banner-lock-description-default"
+                        focusable="false"
+                      >
+                        <title id="banner-lock-title-default">Lock</title>
+                        <desc id="banner-lock-description-default">A locked padlock</desc>
+                        <path
+                          fill="#000000"
+                          fill-rule="evenodd"
+                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"/>
+                        </svg></span>
+                    ) or <strong>https://</strong> means you’ve safely connected to
+                    the .gov website. Share sensitive information only on official,
+                    secure websites.
+                  </p> -->
+          </div>
+        </div>
+    </div>
+    <!-- </div>
+        </div>-->
+  </section>
+
+
+  <!-- Adding original census.gov css -->
+  <!--
+<link rel="stylesheet" href="https://www.census.gov/main/css/_new/bootstrap.css" class="cb-main-support global-file">
+<link rel="stylesheet" href="https://www.census.gov/main/css/_new/base.css" class="cb-main-support global-file">
+<link rel="stylesheet" href="https://www.census.gov/main/css/_new/extra.css" class="cb-main-support global-file">
+<link rel="stylesheet" href="https://www.census.gov/main/css/_new/typeahead.css" class="cb-main-support global-file">
+<link rel="stylesheet" href="https://www.census.gov/main/css/_new/header.css" class="cb-main-support global-file">
+<link rel="stylesheet" href="https://www.census.gov/main/css/_new/search.css" class="cb-main-support global-file">
+ -->
+
+  <style id="antiClickjack">
+    body {
+      display: none !important
+    }
+  </style>
+  <script type="text/javascript" src="https://www.census.gov/main/javascript/clickjack.js"></script>
+  <script src="https://www.census.gov/main/responsive-header/jquery/jquery.js"
+    class="cb-main-support global-file"></script>
+  <script src="https://www.census.gov/main/responsive-header/jquery/jquery-ui.js"
+    class="cb-main-support global-file"></script>
+
+  <!-- Check for jquery conflict -->
+  <script type="text/javascript">
+    $.ajax({
+      type: 'get',
+      url: '/main/app-config/header/adobe-launch.txt',
+      dataType: 'text',
+      success: function (data) {
+        var adobeLaunchScript = document.createElement("script");
+        adobeLaunchScript.setAttribute("src", data);
+        document.head.appendChild(adobeLaunchScript);
+      },
+      error: function (xhr, errorText, errorMessage) {
+        console.log('adobe-launch URL recognition failed: ' + errorText);
+      }
+    });
+
+    $acn = jQuery.noConflict();
+    if (typeof jQuery === 'undefined' || typeof $ === 'undefined') {
+      jQuery = $acn;
+      $ = $acn;
+    }
+    $(function () {
+      $('.cb-header-skip-nav').click(function () {
+        $('#cb-after-header-anchor').focus();
+      });
+    });
+  </script>
+
+
+  <script src="https://www.census.gov/main/responsive-header/bootstrap-custom/js/bootstrap.js"
+    class="cb-main-support global-file"></script>
+  <script src="https://www.census.gov/main/responsive-header/js/typeahead.js"
+    class="cb-main-support global-file"></script>
+
+
+  <style type="text/css">
+    header.hdr-primary,
+    header.hdr-primary>nav {
+      display: flex !important;
+      align-items: center !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      height: 64px !important;
+      background-color: #112e51 !important;
+      border-color: #112e51 !important;
+    }
+
+    header.hdr-primary>nav>div {
+      box-sizing: border-box !important;
+      height: 36.62px !important;
+      font-size: 20px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.02em !important;
+      line-height: 30px !important;
+      white-space: nowrap !important;
+      vertical-align: baseline !important;
+      padding: 0 0 0 16px !important;
+      margin: 0 !important;
+      min-width: 150px !important;
+    }
+
+    header.hdr-primary>nav>div>a,
+    header.hdr-primary>nav>div>a>img {
+      padding: 0 !important;
+      margin: 0 !important;
+      border-style: none !important;
+      background: transparent !important;
+      text-decoration: none !important;
+    }
+
+    header.hdr-primary>nav>div>a {
+      box-sizing: border-box !important;
+      cursor: pointer !important;
+      text-decoration: none !important;
+    }
+
+    header.hdr-primary>nav>div>a>img {
+      width: 86px !important;
+      height: 33.62px !important;
+      margin-left: 15px !important;
+    }
+  </style>
+  <button class="cb-header-skip-nav sr-only sr-only-focusable">Skip to main content</button>
+  <header class="hdr-primary">
+    <nav>
+      <!--  <div><a href="https://www.census.gov" id="census-home-link"><img src="https://data.census.gov/cedsci/img/census-logo-white.25c8cb29.svg" alt="United States Census Bureau" title="U.S. Census Bureau"></a></div>
+          <div><a href="https://www.census.gov" id="census-home-link"><img src="https://wdob.dev.adsd.census.gov/main/.in/USCENSUS_IDENTITY_SOLO_White_2in_TM.svg" alt="United States Census Bureau" title="U.S. Census Bureau"></a></div>
+
+        <div><a href="https://www.census.gov" id="census-home-link"><img
+                    src="https://www.census.gov/etc.clientlibs/census/clientlibs/census-pattern-library/resources/images/USCENSUS_IDENTITY_SOLO_White_2in_TM.svg"
+                    alt="United States Census Bureau" title="U.S. Census Bureau"></a></div>
+-->
+      <!-- RESTORE THIS DIV TAG AFTER LOGO PUT IN AKAMAI PATTERN LIBRARY
+ <div><a href="https://www.census.gov" id="census-home-link"><img
+                    src="https://www.census.gov/etc.clientlibs/census/clientlibs
+/census-pattern-library/resources/images/USCENSUS_IDENTITY_SOLO_WHITE_2in_R.svg"
+                    alt="United States Census Bureau" title="U.S. Census Bureau"></a></div>
+-->
+      <div><a href="https://www.census.gov" id="census-home-link"><img
+            src="/main/img/USCENSUS_IDENTITY_SOLO_WHITE_2in_R.svg" alt="United States Census Bureau"
+            title="U.S. Census Bureau"></a></div>
+    </nav>
+  </header>
+  <a class="sr-only" tabindex="-1" id="cb-after-header-anchor">end of header</a>
+
+
+
+  <div id="content-wrapper">
+
+
+    <div id="sections">
+
+      <br />
+      <!--
+<div class="row row_ar top_heading ">
+   <div id="" class="col-xs-11">
+      <div id="tab_panel" class="panel panel-body" >
+      The U.S. population total and population change have been adjusted to be consistent with the results of the 2020 Census. The components of population change have not been adjusted and so inconsistencies will exist between population values derived directly from the components and the population displayed in the odometer and the Select a Date tool.
+
+   </div>
+   </div>
+</div>
+-->
+      <style>
+        #tab_panel {
+          padding: 5px 12px;
+          padding-top: 12px;
+          padding-bottom: 12px;
+          padding-left: 10px;
+          color: white;
+          background-image: linear-gradient(-132deg, #112E51 5%, #008392 100%);
+          border-radius: 3px;
+          //margin: 0px 6px 6px 6px;
+        }
+      </style>
+
+      <div id="popclock-intro">
+        <h1>U.S. and World Population Clock
+          <!--
+		<a href="https://www.census.gov/popclock/rss/popclockRSS.php">
+			<img style="margin-left:3px;" src="/main/img/rss_icon.png"  width="26px" height="26px" alt="RSS icon" class="icon_rss_header button_sprite" />
+		</a>
+-->
+          <!--
+		<a href="./popclock_feedback.php" class="with-arrow">Tell us what you think</a>
+-->
+        </h1>
+      </div>
+      <a href="https://www.census.gov/popclock/" id="us-tab" class="active">United States main page</a><a
+        href="https://www.census.gov/popclock/world" id="world-tab" class="">World main page</a>
+    </div>
+
+    <!-- U.S. and World populations -->
+    <script type="text/javascript">
+      $(function () {
+        popCountersViewController = new PopCountersViewController(api, animator, 'us-pop-container', 'us-pop-components-container', 'world-pop-container');
+
+        usPopContainer = $('us-pop-container');
+        usPopComponentsContainer = $('#us-pop-components-container');
+        usPopComponentsContainer.find('p').text(config.components.us_rates.label);
+
+        worldPopContainer = $('world-pop-container');
+        worldPopComponentsContainer = $('#world-pop-historical');
+        worldPopComponentsContainer.find('p').append(config.components.world_rates.label);
+
+        popCountersViewController.createViews(270, 115, 15, 44, 36, 484, { main: 'https://www.census.gov/popclock/images/strip.png' });
+
+      });
+
+    </script>
+    <div id="population-counter-container" class="container beveled shadow vertical-gradient">
+      <div class="component-header alt">
+        <p>date</p>
+        <p class="share"><a href="#counter-footnote"></a> | <a href="./embed.php?component=counter"></a></p>
+
+      </div>
+      <div class="ffix">&nbsp;</div>
+      <!-- U.S. population data -->
+      <div id="us-pop-wrapper" class="lcol">
+
+        <!-- contains header, progress bar, and counter -->
+        <div id="us-pop-container">
+          <h3></h3>
+          <!-- population counter -->
+          <p></p>
+        </div>
+
+        <!-- contains table with data types and progress bars -->
+        <div id="us-pop-components-container">
+          <p></p>
+          <table>
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="ffix">&nbsp;</div>
+      </div>
+
+      <!-- World population data -->
+      <div id="world-pop-wrapper" class="rcol">
+
+        <!-- container header, progress bar, and counter -->
+        <div id="world-pop-container">
+          <h3></h3>
+          <!-- population counter -->
+          <p></p>
+        </div>
+        <!-- contains two tables with population on date -->
+        <div id="world-pop-historical">
+          <p></p>
+          <table>
+          </table>
+          <table>
+          </table>
+        </div>
+
+        <div class="ffix">&nbsp;</div>
+      </div>
+      <div class="ffix">&nbsp;</div>
+    </div>
+    <!-- End U.S. and World populations -->
+    <!-- U.S. and World populations -->
+
+    <script type="text/javascript">
+      $(function () {
+        var default_date = new Date(config.components.pop_on_date.default_year, config.components.pop_on_date.default_month - 1, config.components.pop_on_date.default_day);
+
+
+        popOnDateViewController = new PopOnDateViewController(api, 'us-pop-on-date', 'date', '.select-date', '.pop-count', default_date);
+        popOnDateViewController.shareLink = popOnDateViewController.jQueryEquivalent.find('.share a:eq(1)'); // download and share link
+        popOnDateViewController.shareLinkOriginalHref = popOnDateViewController.shareLink.attr('href'); // download and share original HREF
+        var preparingDataForDate = popOnDateViewController.prepareDataForDate();
+
+
+      });
+    </script>
+    <div id="us-pop-on-date" class="component-header vertical-gradient shadow full-border beveled ">
+      <form><input id="date" type="text" tabindex="-1" disabled="disabled" /></form>
+      <a id="select-date-image" class="select-date" href="#dateselect">select date</a>
+      <p id="seldate"></p>
+      <p class="share"><a href="#pop_on_date-footnote"></a> | <a href="./embed.php?component=pop_on_date"></a></p>
+      <div class="ffix">&nbsp;</div>
+    </div>
+    <!-- Population distributions -->
+    <h2></h2>
+    <div id="pop-dist-wrapper" class="container vertical-gradient shadow beveled default-border">
+      <div class="vertical-gradient-light">
+        <div id="population-growth-container" class="lcol">
+          <script type="text/javascript">
+            $(function () {
+
+              $('#population-growth-header').find('h3').text(config.components.growth.label);
+              popGrowthViewController = new PopGrowth(api, 'population-growth-wrapper', 'population-growth-chart', 'population-growth-overlay', config.components.growth.min_year, config.components.growth.max_year);
+              var creatingChart = popGrowthViewController.createChart();
+
+
+
+            });
+          </script>
+          <div id="population-growth-header" class="component-header horizontal-gradient bottom-border outset">
+            <h3 aria-label="Graph showing population growth by region"></h3>
+            <p class="share"><a href="#growth-footnote"></a> | <a href="./embed.php?component=growth"></a> | <a
+                aria-label="United States Population Growth by Region graph"
+                href="./data_tables.php?component=growth"></a></p>
+          </div>
+          <!-- population distribution chart w/ overlay -->
+          <div id="population-growth-wrapper">
+            <div id="population-growth-overlay" class="vertical-gradient shadow beveled">
+              <h4>Regional Populations</h4>
+              <table>
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <!-- raphy chart uses the inline style attribute for its width and height setting -->
+            <div id="population-growth-chart">
+              <!-- stacked line chart, generated using Raphael -->
+            </div>
+            <p id="pop-growth-legend"><span class="northeast-legend">&nbsp;</span>Northeast <span
+                class="midwest-legend">&nbsp;</span>Midwest <span class="west-legend">&nbsp;</span>West <span
+                class="south-legend">&nbsp;</span>South</p>
+          </div>
+          <!-- population distribution tables -->
+
+        </div>
+        <div class="rcol">
+          <script type="text/javascript">
+            $(function () {
+              popPyramidViewController = new PopPyramidViewController(api, animator, 'population-pyramid-graph', 'population-pyramid-slider', 0.3);
+
+              popPyramidViewController.shareLink = $('#population-pyramid-wrapper').parent().find('nav.share a:eq(1)'); // download and share link
+              popPyramidViewController.shareLinkOriginalHref = popPyramidViewController.shareLink.prop('href'); // download and share original HREF
+
+              // we don't need to display a chart for print - image will be added later
+              popPyramidViewController.layoutViews(config.components.pyramid.min_year, config.components.pyramid.max_year);
+              var creatingChart = popPyramidViewController.createChart();
+
+
+
+            });
+          </script>
+          <div id="population-age-header" class="component-header horizontal-gradient bottom-border outset">
+            <h3>United States Population by Age and Sex</h3>
+            <p class="share"><a href="#pyramid-footnote"></a> | <a href="./embed.php?component=pyramid"></a> | <a
+                aria-label="United States Population by Age and Sex graph"
+                href="./data_tables.php?component=pyramid"></a></p>
+          </div>
+          <div id="population-pyramid-wrapper">
+            <div id="population-pyramid-graph">
+
+              <!-- split bar chart, generated using Raphael -->
+            </div>
+            <a aria-label="Play and pause button for the Population by Age and Sex animated graph"
+              id="population-pyramid-play-button" href="">play/pause</a>
+            <div id="population-pyramid-slider">
+              <!-- year slider, generated using Raphael -->
+            </div>
+          </div>
+        </div>
+        <div class="ffix">&nbsp;</div>
+      </div>
+      <div class="vertical-gradient-light">
+        <div class="lcol">
+          <script type="text/javascript">
+            $(function () {
+              $('#most-populous-header h3').text(config.components.populous.label);
+              mostPopulousViewController = new MostPopulousViewController(api, 'us-most-populous-container', $('#most-populous-header'));
+              var creatingTables = mostPopulousViewController.createTables();
+
+              // temporary - testing getCSV method
+              creatingTables.done(function () {
+                mostPopulousViewController.getCSV();
+              });
+
+
+
+            });
+
+          </script>
+          <div id="most-populous-header" class="component-header horizontal-gradient top-bottom-border outset">
+            <h3></h3>
+            <p class="share"><a href="#populous-footnote"></a> | <a href="./embed.php?component=populous"></a></p>
+          </div>
+          <div class="tabbed-table-wrapper">
+            <div id="us-most-populous-container">
+              <ul class="tabs">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="rcol">
+          <script type="text/javascript">
+            $(function () {
+              $('#highest-density-header h3').text(config.components.density.label);
+              highestDensityViewController = new HighestDensityViewController(api, 'us-highest-density-container', $('#highest-density-header'));
+              var creatingTables = highestDensityViewController.createTables();
+
+
+
+            });
+          </script>
+          <div id="highest-density-header" class="component-header horizontal-gradient top-bottom-border outset">
+            <h3></h3>
+            <p class="share"><a href="#footnotes"></a> | <a
+                href="https://www.census.gov/popclock/embed.php?component=density"></a></p>
+          </div>
+          <div class="tabbed-table-wrapper">
+            <div id="us-highest-density-container">
+              <ul class="tabs">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="ffix">&nbsp;</div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      $(function () {
+        var footNoteContainer = $('#footnotes');
+        footNoteContainer.find('h3').text(config.footnotes.label);
+        for (var key in config.footnotes) {
+
+          footNoteContainer.append('<div id="' + key + '-footnote">');
+          if (key !== 'label' && isDefined(config.footnotes[key].label)) { // make sure not overal footnotes title label
+            footNoteContainer.append('<h4>' + config.footnotes[key].label + '</h4>');
+          }
+          if (key !== 'label' && isDefined(config.footnotes[key].content)) {
+            footNoteContainer.append(config.footnotes[key].content);
+          }
+          footNoteContainer.append('</div>');
+        }
+      });
+    </script>
+    <!-- Footnotes -->
+    <div id="footnotes">
+      <h3></h3>
+    </div>
+    <div class="clear">&nbsp;</div><br />
+  </div>
+  <br />
+  <br />
+
+  <!-- START CB Footer - Last Revised: 7/6/2021 -->
+  <!-- Responsive Version -->
+  <!DOCTYPE html>
+
+  <head>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://www.census.gov/main/css/bootstrap-4.3.1.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://www.census.gov/main/css/new_footer.css">
+
+    <!-- <script src="https://www.census.gov/main/javascript/jquery-3.0.0/jquery.min.js"></script> -->
+    <!-- <script src="https://www.census.gov/main/javascript/bootstrap-4.3.1/bootstrap.min.js"></script> -->
+
+    <style>
+      @media only screen and (max-width: 700px) {
+        .val {
+          width: 100%;
+          margin: auto 0;
+
+        }
+
+        a {
+          /*font-size: x-small;*/
+        }
+
+        .foot_bottom_links {
+          width: 100%;
+
+          text-align: left;
+        }
+
+      }
+
+      hr {
+        margin-bottom: 0;
+      }
+    </style>
+
+  </head>
+
+  <footer class="footer container-fluid">
+    <div class="row">
+
+      <div class="grid_footer_links cf">
+        <hr>
+
+        <div class="foot_bottom">
+          <div class="foot_bottom_links">
+
+            <div class="footerbottom">
+
+
+              <div class="val">
+                <a class="foot_bottom_socialLinks"
+                  href="https://www.census.gov/about/contact-us/social_media.html">CONNECT WITH US</a>
+                <a class="foot_bottom_socialLinks" href="https://www.facebook.com/uscensusbureau" target="_blank"><img
+                    src="https://www.census.gov/main/img/Facebook_White.svg" alt="Facebook logo" title="Facebook" /></a>
+                <a class="foot_bottom_socialLinks" href="https://twitter.com/uscensusbureau" target="_blank"><img
+                    src="https://www.census.gov/main/img/Twitter_White.svg" alt="Twitter logo" title="Twitter" /></a>
+                <a class="foot_bottom_socialLinks" href="https://www.linkedin.com/company/us-census-bureau"
+                  target="_blank"><img src="https://www.census.gov/main/img/LinkedIN_White.svg" alt="LinkedIn logo"
+                    title="LinkedIn" /></a>
+                <a class="foot_bottom_socialLinks" href="https://www.youtube.com/user/uscensusbureau"
+                  target="_blank"><img src="https://www.census.gov/main/img/Youtube_White.svg" alt="YouTube logo"
+                    title="YouTube" /></a>
+                <a class="foot_bottom_socialLinks" href="https://www.instagram.com/uscensusbureau/" target="_blank"><img
+                    src="https://www.census.gov/main/img/Instagram_White.svg" alt="Instagram logo"
+                    title="Instagram" /></a>
+                <a class="foot_bottom_socialLinks"
+                  href="https://public.govdelivery.com/accounts/USCENSUS/subscriber/new" target="_blank"><img
+                    src="https://www.census.gov/main/img/Mail_White.svg" alt="Email Updates logo"
+                    title="Email Updates" /></a>
+              </div>
+
+              <div class="val">
+                <ul class="legal-menu">
+                  <li><a href="https://www.census.gov/about/policies/section-508.html">Accessibility</a></li>
+                  <li><a href="https://www.census.gov/quality/">Information Quality</a></li>
+                  <li><a href="https://www.census.gov/foia/">FOIA</a></li>
+                  <li><a href="https://www.census.gov/privacy/">Data Protection and Privacy Policy</a></li>
+                  <li><a href="https://www.commerce.gov/">U.S. Department of Commerce</a></li>
+                </ul>
+
+              </div>
+            </div>
+          </div> <!-- end class=footerbotom -->
+        </div> <!-- end class=foot_bottom_links -->
+      </div> <!-- end class=grid_footer_links -->
+    </div>
+  </footer> <!-- end class=footer -->
+
+  <div id="ratingTool">
+    <!-- START Rating Tool -->
+
+
+    <div id="ratingtooljquery"></div>
+    <script id="ratingtooljs" type="text/javascript" src="/ratingtool/js/ratingtool.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/ratingtool/css/ratingtool.min.css">
+
+    <div id="thumbs_div" class="ratingtool_div">
+      <div id="CloseThumbs" alt="Close" tabindex="3">X</div>
+      <div class="WasThisPageHelpful_div">
+        <span class=WasThisPageHelpfulText align="top">&nbsp;&nbsp;Is this page helpful?</span><br>
+        <center>
+          <img class="thumbs-valign" id="thumbsup" src="/ratingtool/images/thumbsup.png" alt="Thumbs Up Image"
+            tabindex="1" />
+          <span class="YesNoText" id="yes">Yes</span>&nbsp;&nbsp;&nbsp;
+          <img class="thumbs-valign" id="thumbsdown" src="/ratingtool/images/thumbsdown.png" alt="Thumbs Down Image"
+            tabindex="2" />
+          <span class="YesNoText" id="no">No</span>
+        </center>
+
+      </div>
+    </div>
+
+    <div id="popupRating">
+      <div id="closeX" alt="Close" tabindex="4">X</div>
+      <div id="popupRatingHeadingContainer">
+        <span class="popupRatingHeading"></span>
+      </div>
+      <div id="popupRatingContainer">
+        <form id="rtform" method="post" name="rtform">
+          <textarea id="RatingTool_textarea" name="message" placeholder="Tell us more."
+            alt="Comments or Suggestions 255 characters max" tabindex="2" maxlength="255"></textarea>
+          <input alt="Submit" tabindex="3" id="RatingToolSubmit" type="submit" value="SUBMIT">
+        </form>
+        <div id="NoThanksDiv">
+          <span tabindex="1" class="NoThanks" alt="No thanks">No, thanks</span>
+
+        </div>
+        <div id="CharCounter">
+          <span id="rchars">255</span> characters remaining
+        </div>
+      </div>
+    </div>
+
+    <div id="thnx_div" class="thankyou_div">
+      <div id="closeXX" alt="Close" tabindex="2">X</div>
+      <div class="thankyouforfeedback_div">
+        <span class=thankyouText>Thank you for your feedback.</span><br>
+        <span class="YesNoText" id="linkcomments" tabindex="1">Comments or suggestions?</span>
+      </div>
+    </div>
+    <!-- END Rating Tool -->
+
+
+  </div>
+
+</html>
+
+</div>
+
+</div>
+<script type="text/javascript">
+  var popoverTopIsSet = false;
+  function show_popover() {
+    $popoverOverlay.show();
+    $popoverContainer.show();
+
+    position_popover();
+  }
+
+  function position_popover() {
+    var $window = $(window);
+
+
+    var top = $window.scrollTop() + Math.max(0, $window.height() / 2 - $popoverContainer.outerHeight(true) / 2);
+    var left = Math.max(0, $window.width() / 2 - $popoverContainer.outerWidth(true) / 2);
+
+    // Center container
+    if (!popoverTopIsSet)
+      $popoverContainer.css('top', top);
+    $popoverContainer.css('left', left);
+
+  }
+
+  function resize_popover(width, height) {
+    // Set frame width and height
+    $popoverFrame.width(width).height(height);
+
+    position_popover();
+    popoverTopIsSet = true;
+  }
+
+  function hide_popover() {
+    $popoverFrame.attr('src', 'about:blank');
+    $popoverOverlay.hide();
+    $popoverContainer.hide();
+    popoverTopIsSet = false;
+  }
+
+  $(function () {
+    // Sharing popup
+    $popoverOverlay = $('#popover-overlay');
+    $popoverContainer = $('#popover');
+    $popoverFrame = $popoverContainer.find('iframe');
+
+    $popoverContainer.find('a').click(function () {
+      hide_popover();
+      return false;
+    });
+
+    $popoverOverlay.click(function () {
+      hide_popover();
+      return false;
+    });
+
+    $('.share').each(function () {
+      var $theContainer = $(this);
+      $theContainer.find('a:eq(1)').click(function (event) {
+        event.preventDefault();
+        $popoverFrame.attr('src', this.href);
+        show_popover();
+        return false;
+      });
+    });
+
+    $(window).resize(resize_popover);
+  });
+</script>
+<div id="popover-overlay">&nbsp;</div>
+<div id="popover">
+  <a href="#close">close</a>
+  <iframe src="about:blank"></iframe>
+</div>
+
+</body>
+
+</html>
