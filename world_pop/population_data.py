@@ -53,3 +53,10 @@ class PopulationData:
     def population_rate_interval_ms(self, value: int):
         assert value > 0
         self._rate_interval_ms = value
+
+    def to_json(self):
+        return {
+            "population": self.population,
+            "population_rate": self.population_rate,
+            "rate_interval_ms": self.population_rate_interval_ms,
+        }
