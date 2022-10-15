@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Tuple
+from datetime import datetime, timezone
 
 from world_pop.population_data import PopulationData
 from world_pop.population_data_file import PopulationDataFile
@@ -85,6 +86,7 @@ def test_load_valid_file(test_file):
         "population": "500",
         "population_rate": "0.123",
         "rate_interval": "millisecond",
+        "updated": "0",
     }
     json.dump(data, open(test_file[0] / test_file[1], "w"))
 
@@ -104,6 +106,9 @@ def test_save_file(test_file):
     data.population_rate = 0.123
     data.population_rate_interval_ms = 100
 
+    # We don't save beyond second precision
+    data.timestamp = datetime.now(timezone.utc).replace(microsecond=0)
+
     data_file = PopulationDataFile(test_file[0], test_file[1])
     data_file.save(data)
 
@@ -111,3 +116,4 @@ def test_save_file(test_file):
     assert new_data.population == data.population
     assert new_data.population_rate == data.population_rate
     assert new_data.population_rate_interval_ms == data.population_rate_interval_ms
+    assert new_data.timestamp == data.timestamp
