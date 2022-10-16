@@ -23,6 +23,7 @@ class PopulationDataUpdater(PopulationDataObservable):
 
     def update(self):
         try:
+            LOGGER.info("Updating population statistics...")
             self.report_stats(self._update_fn())
         except Exception:
             pass

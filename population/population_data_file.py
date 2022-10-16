@@ -36,6 +36,8 @@ class PopulationDataFile(PopulationDataObserver):
             with open(self._file_path) as f:
                 loaded_data = json.load(f)
 
+            LOGGER.info("Loaded cached data from %s: %s", self._file_path, loaded_data)
+
             return PopulationData(loaded_data)
         except Exception as e:
             LOGGER.warning(
@@ -45,6 +47,7 @@ class PopulationDataFile(PopulationDataObserver):
 
     def save(self, stats: PopulationData):
         with open(self._file_path, "w") as f:
+            LOGGER.info("Saving data cache to %s: %s", self._file_path, stats.to_json())
             json.dump(stats.to_json(), f)
 
     def on_change(self, stats: PopulationData):

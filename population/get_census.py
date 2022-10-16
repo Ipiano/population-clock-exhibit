@@ -11,6 +11,7 @@ URL of the US census population API. Returns a JSON payload with at least
     "population": 7915854387,
     "population_rate": 2.3441182775241,
     "rate_interval": "second",
+    "last_updated": {epoch timestamp seconds}
 }
 """
 REQUEST_URL = "https://www.census.gov/popclock/data/population.php/world"
@@ -35,7 +36,7 @@ def get_world_census() -> PopulationData:
         return PopulationData(json_data)
     except Exception as ex:
         LOGGER.error(
-            "Failed to read stats from json object (%s): %s",
+            "Failed to read stats from json object\n\tJSON: %s\n\tError: %s",
             json_data,
             ex,
         )
