@@ -11,8 +11,9 @@ def population_now(data: PopulationData, when: Optional[datetime] = None) -> int
     when = when or datetime.now(timezone.utc)
     delta_ms = (when - data.timestamp).total_seconds() * 1000
 
-    return data.population + data.population_rate * (
-        delta_ms / data.population_rate_interval_ms
+    return int(
+        data.population
+        + data.population_rate * (delta_ms / data.population_rate_interval_ms)
     )
 
 
