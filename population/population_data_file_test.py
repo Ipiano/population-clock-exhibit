@@ -5,8 +5,8 @@ from tempfile import TemporaryDirectory
 from typing import Tuple
 from datetime import datetime, timezone
 
-from world_pop.population_data import PopulationData
-from world_pop.population_data_file import PopulationDataFile
+from population.population_data import PopulationData
+from population.population_data_file import PopulationDataFile
 
 
 @pytest.fixture

@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime, timedelta, timezone
 
-from world_pop.population_data import PopulationData
+from population.population_data import PopulationData
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 

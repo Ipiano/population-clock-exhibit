@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, Optional
-from world_pop.population_rate import milliseconds_per
+from population.population_rate import milliseconds_per
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 

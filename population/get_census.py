@@ -1,7 +1,7 @@
 import logging
 import requests
 
-from world_pop.population_data import PopulationData
+from population.population_data import PopulationData
 
 LOGGER = logging.Logger("get_census")
 
@@ -16,7 +16,7 @@ URL of the US census population API. Returns a JSON payload with at least
 REQUEST_URL = "https://www.census.gov/popclock/data/population.php/world"
 
 
-def get_latest_census() -> PopulationData:
+def get_world_census() -> PopulationData:
     response = None
     json_data = None
     try:

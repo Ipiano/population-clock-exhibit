@@ -2,9 +2,9 @@ from typing import Optional
 from datetime import datetime, timezone
 from copy import deepcopy
 
-from world_pop.population_data import PopulationData
-from world_pop.population_data_observer import PopulationDataObserver
-from world_pop.population_provider import PopulationProvider
+from population.population_data import PopulationData
+from population.population_data_observer import PopulationDataObserver
+from population.population_provider import PopulationProvider
 
 
 def population_now(data: PopulationData, when: Optional[datetime] = None) -> int:

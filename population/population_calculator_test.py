@@ -1,8 +1,8 @@
 import pytest
 from datetime import datetime, timezone, timedelta
 
-from world_pop.population_calculator import PopulationCalculator
-from world_pop.population_data import PopulationData
+from population.population_calculator import PopulationCalculator
+from population.population_data import PopulationData
 
 
 def test_population_calculator_no_data():

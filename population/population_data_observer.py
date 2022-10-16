@@ -1,6 +1,6 @@
 from abc import *
 
-from world_pop.population_data import PopulationData
+from population.population_data import PopulationData
 
 
 class PopulationDataObserver(ABC):

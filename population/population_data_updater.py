@@ -1,8 +1,8 @@
 from typing import Callable
 
-from world_pop.get_census import get_latest_census
-from world_pop.population_data import PopulationData
-from world_pop.population_data_observer import PopulationDataObservable
+from population.get_census import get_world_census
+from population.population_data import PopulationData
+from population.population_data_observer import PopulationDataObservable
 
 
 class PopulationDataUpdater(PopulationDataObservable):
@@ -13,7 +13,7 @@ class PopulationDataUpdater(PopulationDataObservable):
 
     def __init__(
         self,
-        update_fn: Callable[[], PopulationData] = get_latest_census,
+        update_fn: Callable[[], PopulationData] = get_world_census,
     ):
         self._update_fn = update_fn
 

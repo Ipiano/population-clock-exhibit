@@ -3,8 +3,8 @@ from typing import Optional
 import json
 import logging
 
-from world_pop.population_data_observer import PopulationDataObserver
-from world_pop.population_data import PopulationData
+from population.population_data_observer import PopulationDataObserver
+from population.population_data import PopulationData
 
 """
 Default location to cache the most recent population data so that if

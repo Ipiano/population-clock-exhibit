@@ -1,4 +1,4 @@
-from world_pop.population_rate import milliseconds_per, UnknownUnitError
+from population.population_rate import milliseconds_per, UnknownUnitError
 
 import pytest
 
