@@ -13,7 +13,7 @@ the internet isn't available, we can still provide a reasonable guess
 DEFAULT_CACHE_DIR = Path("/var/cache/pop_clock")
 DEFAULT_CACHE_FILENAME = "world_pop.json"
 
-LOGGER = logging.Logger("data_file")
+LOGGER = logging.getLogger("population.data_file")
 
 
 class PopulationDataFile(PopulationDataObserver):

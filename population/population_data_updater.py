@@ -1,8 +1,11 @@
 from typing import Callable
+import logging
 
 from population.get_census import get_world_census
 from population.population_data import PopulationData
 from population.population_data_observer import PopulationDataObservable
+
+LOGGER = logging.getLogger("population.updater")
 
 
 class PopulationDataUpdater(PopulationDataObservable):

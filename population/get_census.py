@@ -3,7 +3,7 @@ import requests
 
 from population.population_data import PopulationData
 
-LOGGER = logging.Logger("get_census")
+LOGGER = logging.getLogger("get_census")
 
 """
 URL of the US census population API. Returns a JSON payload with at least
