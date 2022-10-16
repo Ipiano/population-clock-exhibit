@@ -86,7 +86,7 @@ def test_load_valid_file(test_file):
         "population": "500",
         "population_rate": "0.123",
         "rate_interval": "millisecond",
-        "updated": "0",
+        "last_updated": "0",
     }
     json.dump(data, open(test_file[0] / test_file[1], "w"))
 

@@ -10,7 +10,7 @@ def test_missing_population():
     data = {
         "population_rate": "0.123",
         "rate_interval": "millisecond",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -22,7 +22,7 @@ def test_invalid_population_type():
         "population_rate": "0.123",
         "rate_interval": "millisecond",
         "population": "abc",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -34,7 +34,7 @@ def test_invalid_population_value():
         "population_rate": "0.123",
         "rate_interval": "millisecond",
         "population": "-1",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -42,7 +42,7 @@ def test_invalid_population_value():
 
 
 def test_missing_population_rate():
-    data = {"population": "1", "rate_interval": "millisecond", "updated": "1234"}
+    data = {"population": "1", "rate_interval": "millisecond", "last_updated": "1234"}
 
     with pytest.raises(Exception):
         pop = PopulationData(data)
@@ -53,7 +53,7 @@ def test_invalid_population_rate_type():
         "population": "1",
         "population_rate": "abc",
         "rate_interval": "millisecond",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -61,7 +61,7 @@ def test_invalid_population_rate_type():
 
 
 def test_missing_rate_interval():
-    data = {"population": "1", "population_rate": "0.123", "updated": "1234"}
+    data = {"population": "1", "population_rate": "0.123", "last_updated": "1234"}
 
     with pytest.raises(Exception):
         pop = PopulationData(data)
@@ -72,7 +72,7 @@ def test_invalid_rate_interval_value():
         "population": "1",
         "population_rate": "0.123",
         "rate_interval": "not a time unit",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -91,7 +91,7 @@ def test_invalid_timestamp_value():
         "population": "1",
         "population_rate": "0.123",
         "rate_interval": "1000",
-        "updated": "abcd",
+        "last_updated": "abcd",
     }
 
     with pytest.raises(Exception):
@@ -103,7 +103,7 @@ def test_load_rate_interval():
         "population": "1",
         "population_rate": "0.123",
         "rate_interval": "second",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     pop = PopulationData(data)
@@ -118,7 +118,7 @@ def test_invalid_rate_interval_ms_type():
         "population": "1",
         "population_rate": "0.123",
         "rate_interval_ms": "abc",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -130,7 +130,7 @@ def test_invalid_rate_interval_ms_value():
         "population": "1",
         "population_rate": "0.123",
         "rate_interval_ms": "-50",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     with pytest.raises(Exception):
@@ -142,7 +142,7 @@ def test_load_rate_interval_ms():
         "population": "1",
         "population_rate": "0.123",
         "rate_interval_ms": "1000",
-        "updated": "1234",
+        "last_updated": "1234",
     }
 
     pop = PopulationData(data)

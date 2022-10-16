@@ -14,7 +14,7 @@ class PopulationData:
         if data:
             self._population = int(data["population"])
             self._population_rate = float(data["population_rate"])
-            self._timestamp = EPOCH + timedelta(seconds=int(data["updated"]))
+            self._timestamp = EPOCH + timedelta(seconds=int(data["last_updated"]))
 
             # When we get the data from the server, they give rate interval as a
             # unit (second, year, etc.); but when we save/reload it, it's been
@@ -71,5 +71,5 @@ class PopulationData:
             "population": self.population,
             "population_rate": self.population_rate,
             "rate_interval_ms": self.population_rate_interval_ms,
-            "updated": (self.timestamp - EPOCH).total_seconds(),
+            "last_updated": (self.timestamp - EPOCH).total_seconds(),
         }
