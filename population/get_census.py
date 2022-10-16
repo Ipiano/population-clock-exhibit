@@ -26,7 +26,7 @@ def get_world_census() -> PopulationData:
         raise
 
     try:
-        json_data = response.json()
+        json_data = response.json()["world"]
     except requests.JSONDecodeError as ex:
         LOGGER.error("Failed to decode response: %s", response.content)
         raise
