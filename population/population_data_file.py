@@ -29,6 +29,10 @@ class PopulationDataFile(PopulationDataObserver):
         self._data = None
         self._file_path = cache_dir / cache_filename
 
+        if not cache_dir.exists():
+            LOGGER.info("Creating cache dir %s", cache_dir)
+            cache_dir.mkdir(parents=True, exist_ok=True)
+
     def load(self) -> Optional[PopulationData]:
         try:
             loaded_data = None
