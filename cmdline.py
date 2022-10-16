@@ -20,14 +20,14 @@ def parse_args():
     ap.add_argument(
         "-i",
         "--interval",
-        type=int,
+        type=float,
         default=1,
         help="Number of seconds between calculation updates",
     )
     ap.add_argument(
         "-u",
         "--update",
-        type=int,
+        type=float,
         default="60",
         help="Number of seconds between pinging census.gov for new data",
     )
