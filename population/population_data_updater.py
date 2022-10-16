@@ -18,6 +18,7 @@ class PopulationDataUpdater(PopulationDataObservable):
         self,
         update_fn: Callable[[], PopulationData] = get_world_census,
     ):
+        PopulationDataObservable.__init__(self)
         self._update_fn = update_fn
 
     def update(self):
