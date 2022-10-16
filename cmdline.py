@@ -8,8 +8,8 @@ import time
 from population.population_calculator import PopulationCalculator
 from population.population_data_file import PopulationDataFile
 from population.population_data_updater import PopulationDataUpdater
-from population.population_provider import PopulationProvider
 from util.repeating_timer import RepeatingTimer
+from display.population_display import PopulationDisplay
 
 
 def parse_args():
@@ -45,6 +45,12 @@ def parse_args():
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="Log level",
     )
+    ap.add_argument(
+        "-g",
+        "--graphical",
+        action="store_true",
+        help="Run a UI that displays the population",
+    )
     ap.add_help = True
     return ap.parse_args()
 
@@ -67,31 +73,36 @@ def main(args):
     update_timer = RepeatingTimer(timedelta(seconds=args.update), updater.update)
     update_timer.start()
 
-    # Print to screen regularly
-    def printout():
-        pop = provider.get_population()
-        if pop:
-            print("World Population: {}".format(pop))
-        else:
-            print("Waiting to get initial statistics...")
+    if args.graphical:
+        ui = PopulationDisplay()
+        ui.run()
+    else:
+        # Print to screen regularly
+        def printout():
+            pop = provider.get_population()
+            if pop:
+                print("World Population: {}".format(pop))
+            else:
+                print("Waiting to get initial statistics...")
 
-    print_timer = RepeatingTimer(timedelta(seconds=args.interval), printout)
-    print_timer.start()
+        print_timer = RepeatingTimer(timedelta(seconds=args.interval), printout)
+        print_timer.start()
 
-    do_exit = False
+        do_exit = False
 
-    def handler(signum, frame):
-        nonlocal do_exit
-        do_exit = True
+        def handler(signum, frame):
+            nonlocal do_exit
+            do_exit = True
 
-    signal.signal(signal.SIGINT, handler)
-    signal.signal(signal.SIGABRT, handler)
+        signal.signal(signal.SIGINT, handler)
+        signal.signal(signal.SIGABRT, handler)
 
-    while not do_exit:
-        time.sleep(0.5)
+        while not do_exit:
+            time.sleep(0.5)
+
+        print_timer.stop()
 
     update_timer.stop()
-    print_timer.stop()
 
 
 if __name__ == "__main__":
