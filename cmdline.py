@@ -74,7 +74,7 @@ def main(args):
     update_timer.start()
 
     if args.graphical:
-        ui = PopulationDisplay()
+        ui = PopulationDisplay(provider, timedelta(seconds=args.interval))
         ui.run()
     else:
         # Print to screen regularly

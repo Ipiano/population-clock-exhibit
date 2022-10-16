@@ -4,6 +4,7 @@ import sys
 import signal
 
 from util.repeating_timer import RepeatingTimer
+from population.population_provider import PopulationProvider
 
 from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine
@@ -17,7 +18,7 @@ class PopulationDisplay:
             self._population = None
 
         def set_population(self, pop: int):
-            self._population = str(pop)
+            self._population = str(pop) if pop else None
             self.population_changed.emit()
 
         def get_population(self):
@@ -29,7 +30,11 @@ class PopulationDisplay:
 
         population = Property(str, get_population, notify=population_changed)
 
-    def __init__(self):
+    def __init__(
+        self,
+        population_provider: PopulationProvider,
+        update_interval: timedelta = timedelta(seconds=1),
+    ):
         self._app = QGuiApplication(sys.argv)
 
         self._engine = QQmlApplicationEngine()
@@ -40,16 +45,12 @@ class PopulationDisplay:
             "population_provider", self._bridge
         )
 
-        count = 1
+        self._data_provider = population_provider
 
-        def inc():
-            nonlocal count
-            count += 1
-            self._bridge.set_population(count)
+        def update():
+            self._bridge.set_population(self._data_provider.get_population())
 
-        self._timer = RepeatingTimer(timedelta(seconds=1), inc)
-        self._timer.start()
-
+        self._timer = RepeatingTimer(update_interval, update)
         self._engine.load(str(Path(__file__).parent / "main.qml"))
 
     def run(self):
@@ -71,4 +72,8 @@ class PopulationDisplay:
         signal.signal(signal.SIGINT, handler)
         signal.signal(signal.SIGABRT, handler)
 
-        return self._app.exec_()
+        self._timer.start()
+        ret = self._app.exec_()
+        self._timer.stop()
+
+        return ret
