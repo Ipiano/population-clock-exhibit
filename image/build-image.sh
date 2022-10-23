@@ -3,6 +3,24 @@
 set -o pipefail
 set -o errexit
 
+# Check docker is installed
+if ! which docker > /dev/null; then
+    echo "docker is not set up; please first install docker!"
+    exit 1
+fi
+
+# Figure out if docker can run without root
+DOCKER="docker"
+
+if ! ${DOCKER} ps >/dev/null 2>&1; then
+	DOCKER="sudo docker"
+fi
+if ! ${DOCKER} ps >/dev/null; then
+	echo "error connecting to docker:"
+	${DOCKER} ps
+	exit 1
+fi
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 pushd $SCRIPT_DIR
@@ -97,6 +115,16 @@ echo "====Build Configuration===="
 cat ./config
 echo "==========================="
 
+# Set up ARM emulation
+EMU_PKGS="qemu binfmt-support qemu-user-static"
+
+echo "====Setting up binfmt/qemu===="
+if ! dpkg --list ${EMU_PKGS} > /dev/null; then
+    sudo apt-get install --yes --quiet --no-install-recommends $EMU_PKGS
+fi
+
+${DOCKER} run --rm --privileged multiarch/qemu-user-static --reset -p yes > /dev/null
+
 if [ ! -d ./pi-gen ]; then
     git clone --depth 1 https://github.com/RPI-Distro/pi-gen.git
 fi
@@ -108,9 +136,6 @@ touch pi-gen/stage5/SKIP
 
 touch pi-gen/stage4/SKIP_IMAGES
 touch pi-gen/stage5/SKIP_IMAGES
-
-# sudo apt-get install qemu binfmt-support qemu-user-static
-# docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
 CONTINUE=1 ./pi-gen/build-docker.sh -c $PWD/config
 
