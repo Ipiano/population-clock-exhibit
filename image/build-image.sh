@@ -73,6 +73,7 @@ if [ ! -f ./config ]; then
 
     cp ./config.in ./config
 
+    echo "PIGEN_DOCKER_OPTS=\"--platform linux/386\"" >> ./config
 fi
 
 if [ ! -z "$USER" ]; then
