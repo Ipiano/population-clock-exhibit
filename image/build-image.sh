@@ -73,14 +73,7 @@ if [ ! -f ./config ]; then
 
     cp ./config.in ./config
 
-    echo "WORK_DIR=$PWD/build" >> ./config
-    echo "DEPLOY_DIR=$PWD/deploy" >> ./config
-
-    echo "PIGEN_DOCKER_OPTS=\"--mount type=bind,src=$PWD,dst=$PWD\""
 fi
-
-mkdir -p "$PWD/build"
-mkdir -p "$PWD/deploy"
 
 if [ ! -z "$USER" ]; then
     echo "FIRST_USER_NAME=\"$USER\"" >> ./config
