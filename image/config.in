@@ -7,4 +7,6 @@ TIMEZONE_DEFAULT="America/Chicago"
 
 WPA_COUNTRY="US"
 
+DISABLE_FIRST_BOOT_USER_RENAME=1
+
 ## Begin scripted configuration
