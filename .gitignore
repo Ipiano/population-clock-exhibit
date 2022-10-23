@@ -2,3 +2,8 @@
 .pytest_cache
 __pycache__
 get-pip.py
+
+image/pi-gen
+image/build
+image/deploy
+image/config
