@@ -21,6 +21,7 @@ if ! ${DOCKER} ps >/dev/null; then
 	exit 1
 fi
 
+# Find location of this script
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 pushd $SCRIPT_DIR
@@ -42,6 +43,7 @@ print_usage() {
     echo "  --clean                 Delete old configuration and/or partial image builds"
 }
 
+# Load up CLI args
 USER=""
 PASS=""
 WPA_SSID=""
@@ -81,6 +83,14 @@ while [ ! -z "$1" ]; do
     esac
 done
 
+if [ "$CLEAN" == "1" ]; then
+    export CONTINUE=0
+    rm -f ./config
+else
+    export CONTINUE=1
+fi
+
+# Build the config script
 if [ ! -f ./config ]; then
     if [[ -z "$USER" || -z "$PASS" ]]; then
         echo "-u or -p not specified"
@@ -139,6 +149,7 @@ touch pi-gen/stage5/SKIP
 touch pi-gen/stage2/SKIP_IMAGES
 touch pi-gen/stage5/SKIP_IMAGES
 
-CONTINUE=1 ./pi-gen/build-docker.sh -c $PWD/config
+# Do the build
+./pi-gen/build-docker.sh -c $PWD/config
 
 popd
