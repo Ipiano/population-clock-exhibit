@@ -1,0 +1,10 @@
+IMG_NAME=Popclock
+TARGET_HOSTNAME=population_clock
+
+KEYBOARD_LAYOUT="us"
+KEYBOARD_LAYOUT="English (US)"
+TIMEZONE_DEFAULT="America/Chicago"
+
+WPA_COUNTRY="US"
+
+## Begin scripted configuration
