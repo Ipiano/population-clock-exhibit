@@ -27,12 +27,14 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR
 
 print_usage() {
-    echo "build-image.sh [-u {username}] [-p {password}] [--wpa-ssid {ssid}] [--wpa-pass {password}] [--clean]"
+    echo "build-image.sh [-u {username}] [-p {password}] [--wpa-ssid {ssid}] [--wpa-pass {password}] [--clean] [-h|--help]"
     echo ""
     echo "  Build a Ras-Pi image that runs the population clock project on startup by default."
     echo "  The first time this runs (or when --clean is specified), a username and password must be specified."
     echo "  Once a configuration file is generated, options can be used to append settings; but previously"
     echo "  specified options will persist."
+    echo ""
+    echo "  -h/--help               Show this text and exit"
     echo ""
     echo "  -u {username}           Username of the default account"
     echo "  -p {password}           Password of the default account"
@@ -72,6 +74,10 @@ while [ ! -z "$1" ]; do
         ;;
         "--clean")
             CLEAN=1
+        ;;
+        "-h|--help")
+            print_usage
+            exit 0
         ;;
         -?*)
             print_usage
