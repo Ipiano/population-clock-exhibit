@@ -16,6 +16,7 @@ class PopulationDisplay:
         def __init__(self):
             QObject.__init__(self)
             self._population = None
+            self._fullscreen = False
 
         def set_population(self, pop: int):
             self._population = str(pop) if pop else None
@@ -28,12 +29,25 @@ class PopulationDisplay:
         def population_changed(self):
             pass
 
+        def set_fullscreen(self, fs: bool):
+            self._fullscreen = fs
+            self.fullscreen_changed.emit()
+
+        def get_fullscreen(self):
+            return self._fullscreen
+
+        @Signal
+        def fullscreen_changed(self):
+            pass
+
         population = Property(str, get_population, notify=population_changed)
+        fullscreen = Property(bool, get_fullscreen, set_fullscreen, notify=fullscreen_changed)
 
     def __init__(
         self,
         population_provider: PopulationProvider,
         update_interval: timedelta = timedelta(seconds=1),
+        fullscreen: bool = False
     ):
         self._app = QGuiApplication(sys.argv)
 
@@ -41,12 +55,13 @@ class PopulationDisplay:
         self._engine.quit.connect(self._app.quit)
 
         self._bridge = PopulationDisplay.PopulationBridge()
+        self._bridge.set_fullscreen(fullscreen)
+
         self._engine.rootContext().setContextProperty(
             "population_provider", self._bridge
         )
 
         self._data_provider = population_provider
-
         def update():
             self._bridge.set_population(self._data_provider.get_population())
 

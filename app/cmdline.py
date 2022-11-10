@@ -51,6 +51,12 @@ def parse_args():
         action="store_true",
         help="Run a UI that displays the population",
     )
+    ap.add_argument(
+        "-f",
+        "--fullscreen",
+        action="store_true",
+        help="Run a UI that displays the population (fullscreen)",
+    )
     ap.add_help = True
     return ap.parse_args()
 
@@ -73,8 +79,8 @@ def main(args):
     update_timer = RepeatingTimer(timedelta(seconds=args.update), updater.update)
     update_timer.start()
 
-    if args.graphical:
-        ui = PopulationDisplay(provider, timedelta(seconds=args.interval))
+    if args.graphical or args.fullscreen:
+        ui = PopulationDisplay(provider, timedelta(seconds=args.interval), fullscreen=args.fullscreen)
         ui.run()
     else:
         # Print to screen regularly

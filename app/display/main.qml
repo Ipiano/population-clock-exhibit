@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     title: " "
 
-    property bool fullscreen: false
+    property bool fullscreen: population_provider.fullscreen
 
     width: fullscreen ? Screen.width : 600
     height: fullscreen ? Screen.height : 500
@@ -36,7 +36,7 @@ ApplicationWindow {
                 if (event.key == Qt.Key_Q)
                     close()
                 else if(event.key == Qt.Key_F)
-                    fullscreen = !fullscreen
+                    population_provider.fullscreen = !fullscreen
             }
     }
 }
