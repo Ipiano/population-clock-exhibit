@@ -97,6 +97,8 @@ done
 if [ "$CLEAN" == "1" ]; then
     export CONTINUE=0
     rm -f ./config
+    rm -rf ./pi-gen
+    rm -rf ./deploy
     ${DOCKER} rm -v pigen_work || true
 else
     export CONTINUE=1
