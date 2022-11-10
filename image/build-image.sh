@@ -158,6 +158,9 @@ touch pi-gen/stage4/SKIP_IMAGES
 rm -rf pi-gen/stage5
 cp -r ./stage5 ./pi-gen
 
+# Insert the population clock code into new stage 5
+cp -r ../app ./pi-gen/stage5/01-add-popclock/files/popclock
+
 # Do the build
 ./pi-gen/build-docker.sh -c $PWD/config
 
