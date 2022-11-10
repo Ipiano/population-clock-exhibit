@@ -27,7 +27,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR
 
 print_usage() {
-    echo "build-image.sh [-u {username}] [-p {password}] [--wpa-ssid {ssid}] [--wpa-pass {password}] [--clean] [-h|--help]"
+    echo "build-image.sh [-u {username}] [-p {password}] [--wpa-ssid {ssid}] [--wpa-pass {password}] [--clean] [--save-work] [-h|--help]"
     echo ""
     echo "  Build a Ras-Pi image that runs the population clock project on startup by default."
     echo "  The first time this runs (or when --clean is specified), a username and password must be specified."
@@ -43,6 +43,7 @@ print_usage() {
     echo "  --wpa-pass {password}   Wi-fi password to connect to by default"
     echo ""
     echo "  --clean                 Delete old configuration and/or partial image builds"
+    echo "  --save-work             Preserve the docker container that was used to build the image so it can be re-used for later builds"
 }
 
 # Load up CLI args
@@ -79,7 +80,11 @@ while [ ! -z "$1" ]; do
             print_usage
             exit 0
         ;;
+        "--save-work")
+            export PRESERVE_CONTAINER=1
+        ;;
         -?*)
+            echo "Unknown arg: $0"
             print_usage
             exit 1
         ;;
@@ -92,6 +97,7 @@ done
 if [ "$CLEAN" == "1" ]; then
     export CONTINUE=0
     rm -f ./config
+    ${DOCKER} rm -v pigen_work || true
 else
     export CONTINUE=1
 fi
