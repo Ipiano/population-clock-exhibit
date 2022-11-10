@@ -147,13 +147,16 @@ if [ ! -d ./pi-gen ]; then
     git clone --depth 1 https://github.com/RPI-Distro/pi-gen.git
 fi
 
-# Build up to stage 4, and don't produce the stage 2 image
+# Build up to stage 4, and don't produce the stage 2 or 4 images
 #
 # We need a basic desktop-enabled image. Could probably set up to go to stage 3,
 # but stage 4 sets up a couple nice things w.r.t auto-login and VNC
-touch pi-gen/stage5/SKIP
 touch pi-gen/stage2/SKIP_IMAGES
-touch pi-gen/stage5/SKIP_IMAGES
+touch pi-gen/stage4/SKIP_IMAGES
+
+# Insert custom stage 5 into the build
+rm -rf pi-gen/stage5
+cp -r ./stage5 ./pi-gen
 
 # Do the build
 ./pi-gen/build-docker.sh -c $PWD/config
