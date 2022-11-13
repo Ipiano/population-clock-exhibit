@@ -11,10 +11,11 @@
 # * https://raspberrypi.stackexchange.com/a/53813
 # * https://www.radishlogic.com/raspberry-pi/how-to-disable-screen-sleep-in-raspberry-pi/
 # (Comment by @Eric)
-echo "Disable cursor and sleep"
 on_chroot << EOF
-    XSERVER_CMD="xserver-command=X -nocursor -s 0 dpms"
-	sed -E -i 's/(\[Seat.*\])/\1\n${XSERVER_CMD}/g' /etc/lightdm/lightdm.conf
+    if ! grep -E "^xserver-command" /etc/lightdm/lightdm.conf > /dev/null; then
+        echo "Disable cursor and sleep"
+	    sed -E -i 's/(^\[Seat.*\])/\1\nxserver-command=X -nocursor -s 0 dpms/g' /etc/lightdm/lightdm.conf
+    fi
 EOF
 
 ###
@@ -24,7 +25,9 @@ EOF
 # Comment out `@lxpanel --profile LXDE-pi` in /etc/xdg/lxsession/LXDE-pi/autostart
 #
 # See https://unix.stackexchange.com/a/462739
-echo "Disable taskbar"
 on_chroot << EOF
-    sed -E -i 's/(@lxpanel.*)/#\1/g' /etc/xdg/lxsession/LXDE-pi/autostart
+    if ! grep "#@lxpanel" /etc/xdg/lxsession/LXDE-pi/autostart > /dev/null; then
+        echo "Disable taskbar"
+        sed -E -i 's/(@lxpanel.*)/#\1/g' /etc/xdg/lxsession/LXDE-pi/autostart
+    fi
 EOF
