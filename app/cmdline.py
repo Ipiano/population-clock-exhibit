@@ -14,6 +14,7 @@ from util.repeating_timer import RepeatingTimer
 from display.population_display import PopulationDisplay
 
 LOGGER = logging.getLogger("population")
+LOG_FILE = "/var/log/popclock/popclock.log"
 
 def parse_args():
     ap = ArgumentParser(
@@ -65,7 +66,12 @@ def parse_args():
 
 
 def main(args):
+    try:
+        logging.basicConfig(filename=LOG_FILE)
+    except:
     logging.basicConfig()
+        LOGGER.warning(f"Unable to open log file {LOG_FILE}")
+
     logging.getLogger().setLevel(args.loglevel)
 
     data_file = PopulationDataFile(args.path)
