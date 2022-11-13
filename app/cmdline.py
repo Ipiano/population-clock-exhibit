@@ -72,10 +72,12 @@ def parse_args():
 
 
 def main(args):
+    logging.basicConfig()
+
     try:
-        logging.basicConfig(filename=LOG_FILE)
+        file_handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=104857600, backupCount=5)
+        logging.getLogger().addHandler(file_handler)
     except:
-        logging.basicConfig()
         LOGGER.warning(f"Unable to open log file {LOG_FILE}")
 
     logging.getLogger().setLevel(args.loglevel)
