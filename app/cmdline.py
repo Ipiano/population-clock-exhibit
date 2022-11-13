@@ -61,6 +61,12 @@ def parse_args():
         action="store_true",
         help="Run a UI that displays the population (fullscreen)",
     )
+    ap.add_argument(
+        "--height-hack",
+        type=int,
+        default=0,
+        help="Render in the top of the window this many pixels tall (0 for no hack)",
+    )
     ap.add_help = True
     return ap.parse_args()
 
@@ -69,7 +75,7 @@ def main(args):
     try:
         logging.basicConfig(filename=LOG_FILE)
     except:
-    logging.basicConfig()
+        logging.basicConfig()
         LOGGER.warning(f"Unable to open log file {LOG_FILE}")
 
     logging.getLogger().setLevel(args.loglevel)
@@ -120,7 +126,7 @@ def main(args):
     if args.graphical or args.fullscreen:
         LOGGER.info("Starting UI...")
 
-        ui = PopulationDisplay(provider, timedelta(seconds=args.interval), fullscreen=args.fullscreen)
+        ui = PopulationDisplay(provider, timedelta(seconds=args.interval), fullscreen=args.fullscreen, height_hack=max(0, args.height_hack))
         ui.run()
     else:
         # Print to screen regularly

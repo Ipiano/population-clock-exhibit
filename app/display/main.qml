@@ -7,6 +7,7 @@ ApplicationWindow {
     title: " "
 
     property bool fullscreen: population_provider.fullscreen
+    property int height_hack: population_provider.height_hack
 
     width: fullscreen ? Screen.width : 600
     height: fullscreen ? Screen.height : 500
@@ -19,8 +20,8 @@ ApplicationWindow {
     Text {
         anchors.left: parent.left
         anchors.right: parent.right
-        width: parent.width
-        height: parent.height
+        anchors.top: parent.top
+        height: height_hack > 0 ? Math.min(height_hack, parent.height) : parent.height
 
         text: population_provider.population ? population_provider.population : "Loading..."
 
