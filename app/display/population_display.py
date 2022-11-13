@@ -13,10 +13,11 @@ from PySide2.QtCore import QTimer, QObject, Signal, Property
 
 class PopulationDisplay:
     class PopulationBridge(QObject):
-        def __init__(self):
+        def __init__(self, height_hack=0):
             QObject.__init__(self)
             self._population = None
             self._fullscreen = False
+            self._height_hack = height_hack
 
         def set_population(self, pop: int):
             self._population = str(pop) if pop else None
@@ -40,21 +41,30 @@ class PopulationDisplay:
         def fullscreen_changed(self):
             pass
 
+        def get_height_hack(self):
+            return self._height_hack
+
+        @Signal
+        def height_hack_changed(self):
+            pass
+
         population = Property(str, get_population, notify=population_changed)
         fullscreen = Property(bool, get_fullscreen, set_fullscreen, notify=fullscreen_changed)
+        height_hack = Property(int, get_height_hack, notify=height_hack_changed)
 
     def __init__(
         self,
         population_provider: PopulationProvider,
         update_interval: timedelta = timedelta(seconds=1),
-        fullscreen: bool = False
+        fullscreen: bool = False,
+        height_hack: int = 0
     ):
         self._app = QGuiApplication(sys.argv)
 
         self._engine = QQmlApplicationEngine()
         self._engine.quit.connect(self._app.quit)
 
-        self._bridge = PopulationDisplay.PopulationBridge()
+        self._bridge = PopulationDisplay.PopulationBridge(height_hack)
         self._bridge.set_fullscreen(fullscreen)
 
         self._engine.rootContext().setContextProperty(
