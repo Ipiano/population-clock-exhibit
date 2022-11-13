@@ -1,9 +1,11 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from datetime import timedelta
+from logging.handlers import RotatingFileHandler
 import logging
 import signal
 import time
+import sys
 
 from population.population_data import PopulationData
 from population.population_calculator import PopulationCalculator
@@ -72,15 +74,24 @@ def parse_args():
 
 
 def main(args):
-    logging.basicConfig()
+    logger = logging.getLogger()
+    logger.setLevel(args.loglevel)
+
+    formatter = logging.Formatter('%(asctime)s\t\t%(name)25s:%(levelname)-8s\t-- %(message)s')
+
+    log_stdout = logging.StreamHandler(sys.stdout)
+    log_stdout.setFormatter(formatter)
+
+    logger.addHandler(log_stdout)
 
     try:
         file_handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=104857600, backupCount=5)
-        logging.getLogger().addHandler(file_handler)
+        file_handler.setFormatter(formatter)
+
+        logger.addHandler(file_handler)
     except:
         LOGGER.warning(f"Unable to open log file {LOG_FILE}")
 
-    logging.getLogger().setLevel(args.loglevel)
 
     data_file = PopulationDataFile(args.path)
     updater = PopulationDataUpdater()
