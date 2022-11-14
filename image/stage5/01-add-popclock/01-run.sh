@@ -14,3 +14,6 @@ install -m 755 files/popclock.desktop "${ROOTFS_DIR}/etc/xdg/autostart/"
 on_chroot << EOF
 	cat /opt/popclock/requirements.txt | sed -E 's/(PySide2|shiboken2).*//g' | xargs python3 -m pip install
 EOF
+
+# Create the logging directory
+install -v -o 1000 -g 1000 -d "${ROOTFS_DIR}/var/log/popclock"
