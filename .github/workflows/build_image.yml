@@ -1,0 +1,28 @@
+name: "Release Image"
+on:
+  push:
+    tags:
+      - release/*
+
+jobs:
+  tagged_release:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Image
+        run: |
+          ./image/build-image.sh -u pi -p change_me
+
+      - name: Extract release name
+        shell: bash
+        run: echo "##[set-output name=release;]$(echo ${GITHUB_REF#refs/tags/release/})"
+        id: extract_release
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "release/${{ steps.extract_release.outputs.release }}"
+          title: "${{ steps.extract_release.outputs.release }}"
+          files: |
+            image/deploy/*
