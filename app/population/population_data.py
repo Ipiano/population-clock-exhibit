@@ -15,6 +15,7 @@ class PopulationData:
             self._population = int(data["population"])
             self._population_rate = float(data["population_rate"])
             self._timestamp = EPOCH + timedelta(seconds=int(data["last_updated"]))
+            self._source = data["source"]
 
             # When we get the data from the server, they give rate interval as a
             # unit (second, year, etc.); but when we save/reload it, it's been
@@ -28,6 +29,7 @@ class PopulationData:
             self._population = 0
             self._population_rate = 0
             self._rate_interval_ms = 1
+            self._source = ""
 
         assert self._population >= 0
         assert self._rate_interval_ms > 0
@@ -66,10 +68,15 @@ class PopulationData:
     def timestamp(self, value: datetime):
         self._timestamp = value
 
+    @property
+    def source(self) -> str:
+        return self._source
+
     def to_json(self):
         return {
             "population": self.population,
             "population_rate": self.population_rate,
             "rate_interval_ms": self.population_rate_interval_ms,
             "last_updated": (self.timestamp - EPOCH).total_seconds(),
+            "source": self._source,
         }
