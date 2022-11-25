@@ -60,21 +60,51 @@ ApplicationWindow {
                 Repeater {
                     model: population_value.length
 
-                    Text {
-                        property string character: population_value[modelData]
+                    Item {
+                        id: pop_digit
 
-                        width: character == "," ? sample_text.contentWidth/2 : sample_text.contentWidth
+                        property string character: population_value[modelData]
+                        property bool isComma: character == ","
+
+                        width: isComma ? sample_text.contentWidth/2 : sample_text.contentWidth
                         height: sample_text.contentHeight
 
-                        text: character
+                        Component {
+                            id: comma_component
 
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                            Text {
+                                text: character
 
-                        fontSizeMode: Text.Fit
-                        minimumPointSize: 10
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
 
-                        font: sample_text.font
+                                fontSizeMode: Text.Fit
+                                minimumPointSize: 10
+
+                                font: sample_text.font
+                            }
+                        }
+
+                        Component {
+                            id: number_component
+
+                            Text {
+                                text: character
+
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+
+                                fontSizeMode: Text.Fit
+                                minimumPointSize: 10
+
+                                font: sample_text.font
+                            }
+                        }
+
+                        Loader {
+                            anchors.fill: parent
+                            sourceComponent: isComma ? comma_component : number_component
+                        }
                     }
                 }
             }
