@@ -50,6 +50,7 @@ def test_load_wrong_type_population(test_file):
         "population": "world",
         "population_rate": "0.123",
         "rate_interval": "second",
+        "source": "test",
     }
     json.dump(data, open(test_file[0] / test_file[1], "w"))
 
@@ -62,6 +63,7 @@ def test_load_wrong_type_population_rate(test_file):
         "population": "500",
         "population_rate": "xyz",
         "rate_interval": "second",
+        "source": "test",
     }
     json.dump(data, open(test_file[0] / test_file[1], "w"))
 
@@ -74,6 +76,7 @@ def test_load_wrong_type_rate_interval(test_file):
         "population": "500",
         "population_rate": "0.123",
         "rate_interval": "not a time",
+        "source": "test",
     }
     json.dump(data, open(test_file[0] / test_file[1], "w"))
 
@@ -87,6 +90,7 @@ def test_load_valid_file(test_file):
         "population_rate": "0.123",
         "rate_interval": "millisecond",
         "last_updated": "0",
+        "source": "test",
     }
     json.dump(data, open(test_file[0] / test_file[1], "w"))
 
