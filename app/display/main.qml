@@ -41,6 +41,8 @@ ApplicationWindow {
             fontSizeMode: Text.Fit
             minimumPointSize: 10
             font.pointSize: 1000
+
+            font.family: "DejaVu Sans"
         }
 
         Text {
