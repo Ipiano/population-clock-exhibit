@@ -32,6 +32,8 @@ def get_world_census() -> PopulationData:
         LOGGER.error("Failed to decode response: %s", response.content)
         raise
 
+    json_data["source"] = "US Census (https://www.census.gov/popclock/)"
+
     try:
         return PopulationData(json_data)
     except Exception as ex:
