@@ -28,3 +28,8 @@ class PopulationCalculator(PopulationDataObserver, PopulationProvider):
         if self._data:
             return population_now(self._data, when)
         return None
+
+    def get_population_source(self) -> Optional[str]:
+        if self._data:
+            return self._data.source
+        return None
