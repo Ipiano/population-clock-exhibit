@@ -17,6 +17,7 @@ class PopulationDisplay:
             QObject.__init__(self)
             self._population = None
             self._fullscreen = False
+            self._source = None
             self._height_hack = height_hack
 
         def set_population(self, pop: int):
@@ -48,16 +49,31 @@ class PopulationDisplay:
         def height_hack_changed(self):
             pass
 
+        def set_source(self, source: str):
+            if source != self._source:
+                self._source = source
+                self.source_changed.emit()
+
+        def get_source(self):
+            return self._source or ""
+
+        @Signal
+        def source_changed(self):
+            pass
+
         population = Property(str, get_population, notify=population_changed)
-        fullscreen = Property(bool, get_fullscreen, set_fullscreen, notify=fullscreen_changed)
+        fullscreen = Property(
+            bool, get_fullscreen, set_fullscreen, notify=fullscreen_changed
+        )
         height_hack = Property(int, get_height_hack, notify=height_hack_changed)
+        source = Property(str, get_source, notify=source_changed)
 
     def __init__(
         self,
         population_provider: PopulationProvider,
         update_interval: timedelta = timedelta(seconds=1),
         fullscreen: bool = False,
-        height_hack: int = 0
+        height_hack: int = 0,
     ):
         self._app = QGuiApplication(sys.argv)
 
@@ -72,8 +88,10 @@ class PopulationDisplay:
         )
 
         self._data_provider = population_provider
+
         def update():
             self._bridge.set_population(self._data_provider.get_population())
+            self._bridge.set_source(self._data_provider.get_population_source())
 
         self._timer = RepeatingTimer(update_interval, update)
         self._engine.load(str(Path(__file__).parent / "main.qml"))
