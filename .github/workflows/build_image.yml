@@ -1,0 +1,23 @@
+name: "Release Image"
+on:
+  push:
+    tags:
+      - release/*
+
+jobs:
+  tagged_release:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Image
+        run: |
+          ./image/build-image.sh -u pi -p changeme
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: true
+          automatic_release_tag: latest
+          files: |
+            deploy/*.zip
