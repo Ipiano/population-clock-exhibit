@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
+import QtQuick 2.15
 
 ApplicationWindow {
     visible: true
@@ -52,20 +53,45 @@ ApplicationWindow {
                 font.family: "DejaVu Sans"
             }
 
+            Row {
+                visible: population_value
+                anchors.centerIn: parent
+
+                Repeater {
+                    model: population_value.length
+
+                    Text {
+                        width: sample_text.contentWidth
+                        height: sample_text.contentHeight
+
+                        text: population_value[modelData]
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        fontSizeMode: Text.Fit
+                        minimumPointSize: 10
+
+                        font: sample_text.font
+                    }
+                }
+            }
+
             Text {
                 id: pop_text
                 anchors.fill: parent
 
-                text: population_value ? population_value : "Loading..."
+                visible: !population_value
+
+                text: "Loading..."
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
 
                 fontSizeMode: Text.Fit
                 minimumPointSize: 10
-                font.pointSize: 1000
 
-                font.family: "DejaVu Sans"
+                font: sample_text.font
             }
         }
 
