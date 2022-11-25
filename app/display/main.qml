@@ -57,7 +57,7 @@ ApplicationWindow {
             anchors.top: counter_area.bottom
             anchors.bottom: parent.bottom
 
-            text: "Source: " + population_provider.source
+            text: population_provider.source ? "Source: " + population_provider.source : ""
 
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignRight
