@@ -34,6 +34,24 @@ ApplicationWindow {
             anchors.top: parent.top
             height: display_area.height * 0.9
 
+            // Template for all text, setting the font and character
+            // bounding box based on auto-resizing text
+            Text {
+                id: sample_text
+                visible: false
+
+                width: parent.width / population_value.length
+                height: parent.height
+
+                text: "0"
+
+                fontSizeMode: Text.Fit
+                minimumPointSize: 10
+
+                font.pointSize: 1000
+                font.family: "DejaVu Sans"
+            }
+
             Text {
                 id: pop_text
                 anchors.fill: parent
