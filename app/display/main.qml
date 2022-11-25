@@ -8,6 +8,7 @@ ApplicationWindow {
 
     property bool fullscreen: population_provider.fullscreen
     property int height_hack: population_provider.height_hack
+    property string population_value: population_provider.population ? population_provider.population : ""
 
     width: fullscreen ? Screen.width : 600
     height: fullscreen ? Screen.height : 500
@@ -37,7 +38,7 @@ ApplicationWindow {
                 id: pop_text
                 anchors.fill: parent
 
-                text: population_provider.population ? population_provider.population : "Loading..."
+                text: population_value ? population_value : "Loading..."
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
