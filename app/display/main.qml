@@ -25,30 +25,35 @@ ApplicationWindow {
         anchors.top: parent.top
         height: height_hack > 0 ? Math.min(height_hack, parent.height) : parent.height
 
-        Text {
-            id: pop_text
+        Rectangle {
+            id: counter_area
 
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
             height: display_area.height * 0.9
 
-            text: population_provider.population ? population_provider.population : "Loading..."
+            Text {
+                id: pop_text
+                anchors.fill: parent
 
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+                text: population_provider.population ? population_provider.population : "Loading..."
 
-            fontSizeMode: Text.Fit
-            minimumPointSize: 10
-            font.pointSize: 1000
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
 
-            font.family: "DejaVu Sans"
+                fontSizeMode: Text.Fit
+                minimumPointSize: 10
+                font.pointSize: 1000
+
+                font.family: "DejaVu Sans"
+            }
         }
 
         Text {
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: pop_text.bottom
+            anchors.top: counter_area.bottom
             anchors.bottom: parent.bottom
 
             text: "Source: " + population_provider.source
