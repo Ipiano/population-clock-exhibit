@@ -8,7 +8,7 @@ from population.population_provider import PopulationProvider
 
 from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtCore import QTimer, QObject, Signal, Property
+from PySide2.QtCore import QTimer, QObject, Signal, Property, QLocale
 
 
 class PopulationDisplay:
@@ -21,7 +21,8 @@ class PopulationDisplay:
             self._height_hack = height_hack
 
         def set_population(self, pop: int):
-            self._population = str(pop) if pop else None
+            loc = QLocale(QLocale.English, QLocale.UnitedStates)
+            self._population = loc.toString(pop) if pop else None
             self.population_changed.emit()
 
         def get_population(self):

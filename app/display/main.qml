@@ -61,10 +61,12 @@ ApplicationWindow {
                     model: population_value.length
 
                     Text {
-                        width: sample_text.contentWidth
+                        property string character: population_value[modelData]
+
+                        width: character == "," ? sample_text.contentWidth/2 : sample_text.contentWidth
                         height: sample_text.contentHeight
 
-                        text: population_value[modelData]
+                        text: character
 
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
