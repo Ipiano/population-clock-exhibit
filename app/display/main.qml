@@ -17,20 +17,34 @@ ApplicationWindow {
     flags: fullscreen ? Qt.Window | Qt.SplashScreen | Qt.FramelessWindowHint : Qt.Window
     visibility: fullscreen ? Window.FullScreen : Window.Windowed
 
-    Text {
+    Item {
+        id: display_area
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         height: height_hack > 0 ? Math.min(height_hack, parent.height) : parent.height
 
-        text: population_provider.population ? population_provider.population : "Loading..."
+        Text {
+            id: pop_text
 
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: display_area.height * 0.9
 
-        fontSizeMode: Text.Fit
-        minimumPointSize: 10
-        font.pointSize: 1000
+            text: population_provider.population ? population_provider.population : "Loading..."
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            fontSizeMode: Text.Fit
+            minimumPointSize: 10
+            font.pointSize: 1000
+        }
+
+
+
 
         focus: true
         Keys.onPressed: (event) => {
