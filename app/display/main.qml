@@ -43,8 +43,17 @@ ApplicationWindow {
             font.pointSize: 1000
         }
 
+        Text {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: pop_text.bottom
+            anchors.bottom: parent.bottom
 
+            text: "Source: " + population_provider.source
 
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignRight
+        }
 
         focus: true
         Keys.onPressed: (event) => {
