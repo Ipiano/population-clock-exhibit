@@ -16,13 +16,14 @@ jobs:
 
       - name: Extract release name
         shell: bash
-        run: echo "##[set-output name=release;]$(echo ${GITHUB_REF#refs/tags/release/})"
+        run: echo "release=$(echo ${GITHUB_REF#refs/tags/release/})" >> $GITHUB_OUTPUT
         id: extract_release
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "release/${{ steps.extract_release.outputs.release }}"
+          prerelease: false
           title: "${{ steps.extract_release.outputs.release }}"
           files: |
             image/deploy/*
