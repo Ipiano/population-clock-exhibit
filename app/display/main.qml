@@ -88,16 +88,9 @@ ApplicationWindow {
                         Component {
                             id: number_component
 
-                            Text {
-                                text: character
-
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-
-                                fontSizeMode: Text.Fit
-                                minimumPointSize: 10
-
+                            OdometerNumber {
                                 font: sample_text.font
+                                value: character
                             }
                         }
 
